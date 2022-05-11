@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { Typography, Tabs, Tab } from '@mui/material'
 import SwipeableViews from 'react-swipeable-views/lib/SwipeableViews'
 import TabPanelLayout from '../components/layout/TabPanel'
@@ -11,10 +11,10 @@ import CaloriefyDbContext from '../context/caloriefydb/CaloriefyDbContext'
 function Home() {
   const [tabs, setTabs] = useState(0)
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)
-  const currentDate = new Date()
+  /*const currentDate = new Date()
   const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - 1))
 
-  /*useEffect(() => {
+  useEffect(() => {
     setIntervalData(beforeDate)
   }, [caloriefyDbDispatch])*/
 
