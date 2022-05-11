@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { Typography, TextField, Button, Link, InputAdornment } from '@mui/material'
+import { Typography, TextField, Button, InputAdornment } from '@mui/material'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link as RouterLink } from 'react-router-dom'
@@ -10,7 +10,6 @@ import CaloriefyDbContext from '../context/caloriefydb/CaloriefyDbContext'
 import { toast } from 'react-toastify'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import LockRoundedIcon from '@mui/icons-material/LockRounded'
-import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 
 function Signin() {
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)

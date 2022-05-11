@@ -1,4 +1,3 @@
-import { getConfig } from '@testing-library/react'
 import axios from 'axios'
 
 const CALORIEFY_DB_URL = process.env.REACT_APP_CALORIEFY_DB_URL

@@ -13,7 +13,7 @@ function Tables(props) {
     <div style={{ marginTop: '1em' }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, backgroundColor: 'primary.light' }} aria-label='simple table'>
-          {props.id == 'nutritionTable' && (
+          {props.id === 'nutritionTable' && (
             <>
               <TableHead>
                 <TableRow>
@@ -32,7 +32,7 @@ function Tables(props) {
               </TableBody>
             </>
           )}
-          {props.id == 'activityTable' && (
+          {props.id === 'activityTable' && (
             <>
               <TableHead>
                 <TableRow>

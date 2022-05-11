@@ -1,4 +1,3 @@
-import { PropTypes } from 'prop-types'
 import { totalDataCalc } from '../../Utility'
 import { DatePicker } from '@mui/lab'
 import { LocalizationProvider } from '@mui/lab'

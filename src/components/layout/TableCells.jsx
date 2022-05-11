@@ -7,7 +7,7 @@ function TableCells({ id, index, items }) {
     <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell sx={{ fontWeight: 'bold' }}>{items.name && items.name}</TableCell>
       <TableCell align='right'>{items.calories && items.calories}</TableCell>
-      {id == 'nutritionTable' && (
+      {id === 'nutritionTable' && (
         <>
           <TableCell align='right'>{items.fat_total_g && items.fat_total_g}</TableCell>
           <TableCell align='right'>{items.carbohydrates_total_g && items.carbohydrates_total_g}</TableCell>
@@ -16,7 +16,7 @@ function TableCells({ id, index, items }) {
         </>
       )}
 
-      {id == 'activityTable' && (
+      {id === 'activityTable' && (
         <>
           <TableCell align='right'>{items.activity_time && items.activity_time}</TableCell>
           <TableCell align='right'>{items.activity_length && items.activity_length}</TableCell>

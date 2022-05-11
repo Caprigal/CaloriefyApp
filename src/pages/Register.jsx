@@ -7,11 +7,9 @@ import CaloriefyDbContext from '../context/caloriefydb/CaloriefyDbContext'
 import { toast } from 'react-toastify'
 import { setNewUser } from '../context/caloriefydb/CaloriefyDbActions'
 import DatePickerLayout from '../components/layout/DatePickerLayout'
-import { FaRegUser, FaLock } from 'react-icons/fa'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded'
 import LockRoundedIcon from '@mui/icons-material/LockRounded'
-import { setDate } from 'date-fns'
 
 function Register() {
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)

@@ -14,9 +14,9 @@ function Home() {
   const currentDate = new Date()
   const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - 1))
 
-  useEffect(() => {
+  /*useEffect(() => {
     setIntervalData(beforeDate)
-  }, [caloriefyDbDispatch])
+  }, [caloriefyDbDispatch])*/
 
   const setIntervalData = async (beforeDate) => {
     // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
