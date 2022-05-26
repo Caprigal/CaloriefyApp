@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Typography, Tabs, Tab } from '@mui/material'
 import SwipeableViews from 'react-swipeable-views/lib/SwipeableViews'
 import TabPanelLayout from '../components/layout/TabPanel'
@@ -11,14 +11,18 @@ import CaloriefyDbContext from '../context/caloriefydb/CaloriefyDbContext'
 function Home() {
   const [tabs, setTabs] = useState(0)
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)
-  /*const currentDate = new Date()
+  const currentDate = new Date()
   const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - 1))
 
   useEffect(() => {
     setIntervalData(beforeDate)
-  }, [caloriefyDbDispatch])*/
+  }, [caloriefyDbDispatch])
 
   const setIntervalData = async (beforeDate) => {
+    /* HANDLE LOADING */
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES_LOADING' })
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES_LOADING' })
+
     // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
     const get_response = await getIntervalActivities(beforeDate, new Date())
     if (get_response.status !== 200) {
@@ -37,17 +41,14 @@ function Home() {
   }
 
   const handleChange = async (event, newTab) => {
+    /* CLEAR FIRST */
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES' })
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
+
     const currentDate = new Date()
     const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - (newTab === 0 ? 1 : newTab === 1 ? 7 : newTab === 2 ? 30 : 1)))
 
     setTabs(newTab)
-
-    if (newTab === 3) {
-      //because we set custom date on the 3. tab
-      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES' })
-      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
-      return
-    }
 
     setIntervalData(beforeDate)
   }

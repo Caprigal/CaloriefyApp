@@ -8,13 +8,23 @@ import { getIntervalActivities, getIntervalIntakes } from '../../context/calorie
 import { toast } from 'react-toastify'
 import { TextField, Box, Divider } from '@mui/material'
 import SidebarItem from './SidebarItem'
+import { calculateBCB } from '../../Utility'
 
 function IntervalTabs(props) {
-  const { caloriefyDbDispatch, intervalIntakes, intervalActivities } = useContext(CaloriefyDbContext)
+  const { caloriefyDbDispatch, intervalIntakes, intervalActivities, intakesIntervalLoading, activitiesIntervalLoading, user } =
+    useContext(CaloriefyDbContext)
   const [fromDate, setFromDate] = useState(new Date())
   const [toDate, setToDate] = useState(new Date())
 
   const handleDateFromChange = async (newDate) => {
+    /* CLEAR FIRST */
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES' })
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
+
+    /* HANDLE LOADING */
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES_LOADING' })
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKE_LOADING' })
+
     setFromDate(newDate)
 
     // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
@@ -35,6 +45,13 @@ function IntervalTabs(props) {
   }
 
   const handleDateToChange = async (newDate) => {
+    /* CLEAR FIRST */
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES' })
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
+
+    /* HANDLE LOADING */
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITY_LOADING' })
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES_LOADING' })
     setToDate(newDate)
 
     // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
@@ -84,7 +101,6 @@ function IntervalTabs(props) {
         <Box sx={{ mr: '1%', width: '49%' }}>
           {intervalActivities.length > 0 && (
             <>
-              <Divider sx={{ mt: 2 }} />
               <SidebarItem
                 color='burn.main'
                 openFrom={'Burn'}
@@ -92,19 +108,36 @@ function IntervalTabs(props) {
                 totalSb={true}
                 expanded={true}
                 disableGutters={true}
-                dailyData={totalDataCalc(intervalActivities)}
+                deleteBtn={true}
+                dailyData={totalDataCalc(intervalActivities, 'activity')}
               />
               <Divider sx={{ mt: 2 }} />
             </>
           )}
 
           {intervalActivities.length > 0 &&
-            intervalActivities.map((item, i) => <SidebarItem color='burn.main' openFrom={'Burn'} key={item.id} dailyData={item} />)}
+            intervalActivities.map((item, i) => <SidebarItem color='burn.main' openFrom={'Burn'} key={item.id} deleteBtn={true} dailyData={item} />)}
+
+          {intervalActivities.length > 0 && user.lifestyle && user.weight && user.height && user.birthdate && user.gender ? (
+            <SidebarItem
+              color='burn.main'
+              openFrom='Burn'
+              key='Base calorie burn'
+              deleteBtn={false}
+              dailyData={{
+                name: 'Base calorie burn',
+                calories: calculateBCB(user.lifestyle, user.weight, user.height, user.birthdate, user.gender),
+              }}
+            />
+          ) : <></>}
+
+          {!activitiesIntervalLoading && intervalActivities.length === 0 && <h5>No activities found</h5>}
+
+          {activitiesIntervalLoading && <h5>Loading..</h5>}
         </Box>
         <Box sx={{ ml: '1%', width: '49%' }}>
           {intervalIntakes.length > 0 && (
             <>
-              <Divider sx={{ mt: 2 }} />
               <SidebarItem
                 color='cons.main'
                 openFrom={'Intake'}
@@ -112,14 +145,21 @@ function IntervalTabs(props) {
                 totalSb={true}
                 expanded={true}
                 disableGutters={true}
-                dailyData={totalDataCalc(intervalIntakes)}
+                deleteBtn={true}
+                dailyData={totalDataCalc(intervalIntakes, 'intake')}
               />
               <Divider sx={{ mt: 2 }} />
             </>
           )}
 
           {intervalIntakes.length > 0 &&
-            intervalIntakes.map((item, i) => <SidebarItem color='cons.main' openFrom={'Intake'} key={item.id} dailyData={item} />)}
+            intervalIntakes.map((item, i) => (
+              <SidebarItem color='cons.main' openFrom={'Intake'} key={item.id} deleteBtn={true} dailyData={item} />
+            ))}
+
+          {!intakesIntervalLoading && intervalIntakes.length === 0 && <h5>No intakes found</h5>}
+
+          {intakesIntervalLoading && <h5>Loading..</h5>}
         </Box>
       </Box>
     </div>

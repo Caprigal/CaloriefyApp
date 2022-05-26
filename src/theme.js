@@ -88,6 +88,13 @@ const rawTheme = createTheme({
         },
       },
     },
+    MuiAutocomplete:  {
+      styleOverrides: {
+        loading: {
+          color: '#b1b1d5',
+        },
+      },
+    },
   },
 })
 

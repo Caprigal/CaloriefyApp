@@ -16,7 +16,8 @@ export const CaloriefyDbProvider = ({children}) => {
     intervalIntakes: [],
     intervalActivities: [],
     user: user ? user : null,
-    caloriefyDbLoading: false
+    intakesIntervalLoading: false,
+    activitiesIntervalLoading: false,
   }
 
   const [state, caloriefyDbDispatch] = useReducer(CaloriefyDbReducer, initialState)

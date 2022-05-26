@@ -10,6 +10,7 @@ import DatePickerLayout from '../components/layout/DatePickerLayout'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded'
 import LockRoundedIcon from '@mui/icons-material/LockRounded'
+import { calculateBCB } from '../Utility'
 
 function Register() {
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)
@@ -19,65 +20,40 @@ function Register() {
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
   const [birthDate, setBirthDate] = useState(null)
-  const [age, setAge] = useState(null)
   const [lifestyle, setLifestyle] = useState('')
   const [gender, setGender] = useState('')
   const [baseCalorieBurn, setBaseCalorieBurn] = useState('Please fill the additional informations below')
   const [weight, setWeight] = useState(null)
   const [height, setHeight] = useState(null)
 
-  const calculateBCB = (lifestyle, weight, height, age, gender) => {
-    let bcb
-    if (age && gender === 0) {
-      lifestyle && weight && height
-        ? (bcb = (447.593 + 9.247 * weight + 3.098 * height - 4.33 * age) * (lifestyle / 100 + 1))
-        : (bcb = 'Please fill the additional informations below')
-    } else {
-      lifestyle && weight && height
-        ? (bcb = (88.362 + 13.397 * weight + 4.799 * height - 5.677 * age) * (lifestyle / 100 + 1))
-        : (bcb = 'Please fill the additional informations below')
-    }
-
-    return isNaN(bcb) ? 'Please fill the additional informations below' : parseInt(bcb)
-  }
-
   const handleLifeStyleChange = (event) => {
     setLifestyle(event.target.value)
 
-    setBaseCalorieBurn(calculateBCB(event.target.value, weight, height, age, gender))
+    setBaseCalorieBurn(calculateBCB(event.target.value, weight, height, birthDate, gender))
   }
 
   const handleGenderChange = (event) => {
     setGender(event.target.value)
 
-    setBaseCalorieBurn(calculateBCB(lifestyle, weight, height, age, event.target.value))
+    setBaseCalorieBurn(calculateBCB(lifestyle, weight, height, birthDate, event.target.value))
   }
 
   const handleBirthChange = (newDate) => {
-    setBirthDate(newDate.getFullYear())
+    setBirthDate(newDate)
 
-    var today = new Date()
-    var age = today.getFullYear() - newDate.getFullYear()
-    var m = today.getMonth() - newDate.getMonth()
-    if (m < 0 || (m === 0 && today.getDate() < newDate.getDate())) {
-      age--
-    }
-
-    setAge(age)
-
-    setBaseCalorieBurn(calculateBCB(lifestyle, weight, height, age, gender))
+    setBaseCalorieBurn(calculateBCB(lifestyle, weight, height, newDate, gender))
   }
 
   const handleWeightChange = (event) => {
     setWeight(parseInt(event.target.value))
 
-    setBaseCalorieBurn(calculateBCB(lifestyle, parseInt(event.target.value), height, age, gender))
+    setBaseCalorieBurn(calculateBCB(lifestyle, parseInt(event.target.value), height, birthDate, gender))
   }
 
   const handleHeightChange = (event) => {
     setHeight(parseInt(event.target.value))
 
-    setBaseCalorieBurn(calculateBCB(lifestyle, weight, parseInt(event.target.value), age, gender))
+    setBaseCalorieBurn(calculateBCB(lifestyle, weight, parseInt(event.target.value), birthDate, gender))
   }
 
   const registerUser = async (e) => {
@@ -90,7 +66,7 @@ function Register() {
         username: username,
         email: email,
         password: password,
-        birthdate: birthDate ? birthDate : 0,
+        birthdate: birthDate ? birthDate.getFullYear() : 0,
         lifestyle: lifestyle ? lifestyle : 0,
         gender: gender ? gender : 0,
         weight: weight ? weight : 0,

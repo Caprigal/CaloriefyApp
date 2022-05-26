@@ -16,6 +16,8 @@ function ActivitiesSearch() {
   const activityCalories = useRef(null)
   const activityLength = useRef(null)
   const activityTime = useRef(null)
+  const [activitiesListLoader, setActivitiesListLoader] = useState(false)
+  const [activitiesHistoryLoader, setActivitiesHistoryLoader] = useState(false)
   const [disableButton, setDisableButton] = useState(true)
 
   const postActivities = async (e) => {
@@ -105,26 +107,32 @@ function ActivitiesSearch() {
   }
 
   const openCaloriefyListTab = async () => {
-    // GET ALL ACTIVITIES FROM DB
+    /* SET LOADING */
+    setActivitiesListLoader(true)
 
+    // GET ALL ACTIVITIES FROM DB
     const response = await getActivities()
 
     if (response.status !== 200) {
       return toast.error(response.message || response || `Internal server error!`)
     } else {
       caloriefyDbDispatch({ type: 'SET_ACTIVITIES', payload: response.data })
+      setActivitiesListLoader(false)
     }
   }
 
   const openCaloriefyHistoryTab = async () => {
-    // GET ACTIVITY HISTORY FROM DB
+    /* SET LOADING */
+    setActivitiesHistoryLoader(true)
 
+    // GET ACTIVITY HISTORY FROM DB
     const response = await getActivityHistory()
 
     if (response.status !== 200) {
       return toast.error(response.message || response || `Internal server error!`)
     } else {
       caloriefyDbDispatch({ type: 'SET_ACTIVITY_HISTORY', payload: response.data })
+      setActivitiesHistoryLoader(false)
     }
   }
 
@@ -138,8 +146,8 @@ function ActivitiesSearch() {
             return !pos || item.name !== ary[pos - 1].name
           })}
         onOpen={openCaloriefyListTab}
-        //loading={caloriefyDbLoading}
-        //loadingText='Loading..'
+        loading={activitiesListLoader}
+        loadingText='Loading Caloriefy list..'
         onChange={(e, value) => {
           //set activities
           if (value) {
@@ -181,8 +189,8 @@ function ActivitiesSearch() {
           })}
         onOpen={openCaloriefyHistoryTab}
         disabled={user === null ? true : false}
-        //loading={caloriefyDbLoading}
-        //loadingText='Loading..'
+        loading={activitiesHistoryLoader}
+        loadingText='Loading your history..'
         onChange={(e, value) => {
           //set activities
           if (value) {
@@ -223,7 +231,7 @@ function ActivitiesSearch() {
           sx={{ mb: 2 }}
           inputProps={{
             style: { paddingTop: '24px', paddingBottom: '8px' },
-            maxLength: 30,
+            maxLength: 200,
           }}
           required
           fullWidth

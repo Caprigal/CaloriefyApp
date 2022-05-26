@@ -34,6 +34,8 @@ function NutritionSearch(props) {
   const manualCarbs = useRef(null)
   const manualProteins = useRef(null)
   const [calorieNinjaLoading, setCalorieNinjaLoading] = useState(false)
+  const [intakesListLoader, setIntakesListLoader] = useState(false)
+  const [intakesHistoryLoader, setIntakesHistoryLoader] = useState(false)
   const [disableButton, setDisableButton] = useState(true)
 
   const postNutritions = async (e) => {
@@ -208,25 +210,32 @@ function NutritionSearch(props) {
   }, [caloriefyDbDispatch])*/
 
   const openCaloriefyListTab = async () => {
-    // GET ALL INTAKES FROM DB
+    /* SET LOADING */
+    setIntakesListLoader(true)
+
+    /* GET ALL INTAKES FROM DB */
     const response = await getIntakes()
 
     if (response.status !== 200) {
       return toast.error(response.message || response || `Internal server error!`)
     } else {
       caloriefyDbDispatch({ type: 'SET_INTAKES', payload: response.data })
+      setIntakesListLoader(false)
     }
   }
 
   const openCaloriefyHistoryTab = async () => {
-    // GET ACTIVITY HISTORY FROM DB
+    /* SET LOADING */
+    setIntakesHistoryLoader(true)
 
+    // GET ACTIVITY HISTORY FROM DB
     const response = await getIntakesHistory()
 
     if (response.status !== 200) {
       return toast.error(response.message || response || `Internal server error!`)
     } else {
       caloriefyDbDispatch({ type: 'SET_INTAKES_HISTORY', payload: response.data })
+      setIntakesHistoryLoader(false)
     }
   }
 
@@ -270,6 +279,8 @@ function NutritionSearch(props) {
               .filter(function (item, pos, ary) {
                 return !pos || item.name !== ary[pos - 1].name
               })}
+            loading={intakesListLoader}
+            loadingText='Loading Caloriefy list..'
             onOpen={openCaloriefyListTab}
             clearOnEscape={true}
             onChange={(e, value) => {
@@ -313,6 +324,8 @@ function NutritionSearch(props) {
               .filter(function (item, pos, ary) {
                 return !pos || item.name !== ary[pos - 1].name
               })}
+            loading={intakesHistoryLoader}
+            loadingText='Loading your history..'
             onOpen={openCaloriefyHistoryTab}
             clearOnEscape={true}
             disabled={user === null ? true : false}
@@ -358,7 +371,7 @@ function NutritionSearch(props) {
               sx={{ mb: 2 }}
               inputProps={{
                 style: { paddingTop: '24px', paddingBottom: '8px' },
-                maxLength: 30,
+                maxLength: 200,
               }}
               required
               fullWidth
@@ -456,7 +469,7 @@ function NutritionSearch(props) {
       {console.log('NutritionSearchRender1')}
       {console.log(nutritions)}
 
-      {calorieNinjaLoading && <h1>Loading..</h1>}
+      {calorieNinjaLoading && <h5>Loading..</h5>}
 
       {nutritions[0].name && !calorieNinjaLoading && (
         <>

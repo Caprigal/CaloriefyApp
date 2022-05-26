@@ -1,12 +1,9 @@
 import axios from 'axios'
 
-const CALORIEFY_DB_URL = process.env.REACT_APP_CALORIEFY_DB_URL
+const CALORIEFY_LAMBDA_URL = process.env.REACT_APP_LAMBDA_URL
 
-const caloriefyDb = axios.create({
-  baseURL: CALORIEFY_DB_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const caloriefyLambda = axios.create({
+  baseURL: CALORIEFY_LAMBDA_URL,
 })
 
 const headerConfig = () => {
@@ -25,7 +22,7 @@ const headerConfig = () => {
 
 export const setNewUser = async (User) => {
   try {
-    const response = await caloriefyDb.post(`/api/users`, User)
+    const response = await caloriefyLambda.post(`/createUser`, JSON.stringify(User))
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -36,7 +33,7 @@ export const setNewUser = async (User) => {
 
 export const loginUser = async (User) => {
   try {
-    const response = await caloriefyDb.post(`/api/users/login`, User)
+    const response = await caloriefyLambda.post(`/loginUser`, JSON.stringify(User))
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -47,7 +44,7 @@ export const loginUser = async (User) => {
 
 export const setDailyIntakes = async (Nutrition) => {
   try {
-    const response = await caloriefyDb.post(`/api/intakes`, Nutrition, headerConfig())
+    const response = await caloriefyLambda.post(`/createIntake`, JSON.stringify(Nutrition), headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -58,7 +55,7 @@ export const setDailyIntakes = async (Nutrition) => {
 
 export const getDailyIntakes = async (date) => {
   try {
-    const response = await caloriefyDb.get(`/api/intakes/${date.toISOString()}`, headerConfig())
+    const response = await caloriefyLambda.get(`/getDailyIntakes?date=${date.toISOString()}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -69,7 +66,7 @@ export const getDailyIntakes = async (date) => {
 
 export const getIntervalIntakes = async (datefrom, dateto) => {
   try {
-    const response = await caloriefyDb.get(`/api/intakes/${datefrom.toISOString()}/${dateto.toISOString()}`, headerConfig())
+    const response = await caloriefyLambda.get(`/getIntervalIntakes?from=${datefrom.toISOString()}&to=${dateto.toISOString()}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -80,7 +77,7 @@ export const getIntervalIntakes = async (datefrom, dateto) => {
 
 export const deleteIntake = async (id) => {
   try {
-    const response = await caloriefyDb.delete(`/api/intakes/${id}`, headerConfig())
+    const response = await caloriefyLambda.delete(`/deleteIntake?id=${id}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -91,7 +88,7 @@ export const deleteIntake = async (id) => {
 
 export const getIntakes = async () => {
   try {
-    const response = await caloriefyDb.get(`/api/intakes`)
+    const response = await caloriefyLambda.get(`/getIntakes`)
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -102,7 +99,7 @@ export const getIntakes = async () => {
 
 export const getIntakesHistory = async () => {
   try {
-    const response = await caloriefyDb.get(`/api/intakes/history`, headerConfig())
+    const response = await caloriefyLambda.get(`/getIntakeHistory`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -113,7 +110,7 @@ export const getIntakesHistory = async () => {
 
 export const setDailyActivities = async (Activity) => {
   try {
-    const response = await caloriefyDb.post(`/api/activities`, Activity, headerConfig())
+    const response = await caloriefyLambda.post(`/createActivity`, JSON.stringify(Activity), headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -124,7 +121,7 @@ export const setDailyActivities = async (Activity) => {
 
 export const getDailyActivities = async (date) => {
   try {
-    const response = await caloriefyDb.get(`/api/activities/${date.toISOString()}`, headerConfig())
+    const response = await caloriefyLambda.get(`/getDailyActivities?date=${date.toISOString()}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -135,7 +132,7 @@ export const getDailyActivities = async (date) => {
 
 export const getIntervalActivities = async (datefrom, dateto) => {
   try {
-    const response = await caloriefyDb.get(`/api/activities/${datefrom.toISOString()}/${dateto.toISOString()}`, headerConfig())
+    const response = await caloriefyLambda.get(`/getIntervalActivities?from=${datefrom.toISOString()}&to=${dateto.toISOString()}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -146,7 +143,7 @@ export const getIntervalActivities = async (datefrom, dateto) => {
 
 export const deleteActivity = async (id) => {
   try {
-    const response = await caloriefyDb.delete(`/api/activities/${id}`, headerConfig())
+    const response = await caloriefyLambda.delete(`/deleteActivity?id=${id}`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -157,7 +154,7 @@ export const deleteActivity = async (id) => {
 
 export const getActivities = async () => {
   try {
-    const response = await caloriefyDb.get(`/api/activities`)
+    const response = await caloriefyLambda.get(`/getActivities`)
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -168,7 +165,7 @@ export const getActivities = async () => {
 
 export const getActivityHistory = async () => {
   try {
-    const response = await caloriefyDb.get(`/api/activities/history`, headerConfig())
+    const response = await caloriefyLambda.get(`/getActivityHistory`, headerConfig())
     return response
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()

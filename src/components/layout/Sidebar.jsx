@@ -8,10 +8,10 @@ import { IconButton, Typography } from '@mui/material'
 import CaloriefyDbContext from '../../context/caloriefydb/CaloriefyDbContext'
 import SidebarContext from '../../context/sidebar/SidebarContext'
 import SidebarItem from './SidebarItem'
-import { totalDataCalc } from '../../Utility'
+import { totalDataCalc, calculateBCB } from '../../Utility'
 
 function Sidebar(props) {
-  const { dailyIntakes, dailyActivities } = useContext(CaloriefyDbContext)
+  const { dailyIntakes, dailyActivities, user } = useContext(CaloriefyDbContext)
   const { value, setValue, sidebar, toggleDrawer } = useContext(SidebarContext)
 
   return (
@@ -27,11 +27,11 @@ function Sidebar(props) {
     >
       {console.log('Sidebar render')}
       <Box sx={{ pt: '65px', width: 400, paddingBottom: 2 }} role='presentation'>
-        <IconButton aria-label='close' sx={{ position: 'fixed', mt: 2, ml: 2, mr: 4, color:'primary.dark' }} onClick={toggleDrawer(false)}>
+        <IconButton aria-label='close' sx={{ position: 'fixed', mt: 2, ml: 2, mr: 4, color: 'primary.dark' }} onClick={toggleDrawer(false)}>
           <LastPageRounded fontSize='large' />
         </IconButton>
 
-        <Typography variant='h3' sx={{margin: '28px', mb: 0}}>
+        <Typography variant='h3' sx={{ margin: '28px', mb: 0 }}>
           Activity History
         </Typography>
 
@@ -66,7 +66,8 @@ function Sidebar(props) {
                 totalSb={true}
                 expanded={true}
                 disableGutters={true}
-                dailyData={totalDataCalc(dailyIntakes)}
+                deleteBtn={true}
+                dailyData={totalDataCalc(dailyIntakes, 'intake')}
               />
               <Divider sx={{ mt: 2 }} />
             </>
@@ -74,7 +75,9 @@ function Sidebar(props) {
 
           {props.openFrom === 'Intake' &&
             dailyIntakes.length > 0 &&
-            dailyIntakes.map((item, i) => <SidebarItem color='cons.main' openFrom={props.openFrom} key={item.id} dailyData={item} />)}
+            dailyIntakes.map((item, i) => (
+              <SidebarItem color='cons.main' openFrom={props.openFrom} key={item.id} deleteBtn={true} dailyData={item} />
+            ))}
 
           {props.openFrom === 'Burn' && dailyActivities.length > 0 && (
             <>
@@ -86,7 +89,8 @@ function Sidebar(props) {
                 totalSb={true}
                 expanded={true}
                 disableGutters={true}
-                dailyData={totalDataCalc(dailyActivities)}
+                deleteBtn={true}
+                dailyData={totalDataCalc(dailyActivities, 'activity')}
               />
               <Divider sx={{ mt: 2 }} />
             </>
@@ -94,7 +98,22 @@ function Sidebar(props) {
 
           {props.openFrom === 'Burn' &&
             dailyActivities.length > 0 &&
-            dailyActivities.map((item, i) => <SidebarItem color='burn.main' openFrom={props.openFrom} key={item.id} dailyData={item} />)}
+            dailyActivities.map((item, i) => (
+              <SidebarItem color='burn.main' openFrom={props.openFrom} key={item.id} deleteBtn={true} dailyData={item} />
+            ))}
+
+          {dailyActivities.length > 0 && user.lifestyle && user.weight && user.height && user.birthdate && user.gender && (
+            <SidebarItem
+              color='burn.main'
+              openFrom='Burn'
+              key='Base calorie burn'
+              deleteBtn={false}
+              dailyData={{
+                name: 'Base calorie burn',
+                calories: calculateBCB(user.lifestyle, user.weight, user.height, user.birthdate, user.gender),
+              }}
+            />
+          )}
         </Box>
       </Box>
     </Drawer>

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import CaloriefyDbContext from '../../context/caloriefydb/CaloriefyDbContext'
 import { useContext } from 'react'
 
-function SidebarItem({ openFrom, color, expanded, disableGutters, totalSb, dailyData }) {
+function SidebarItem({ openFrom, color, expanded, disableGutters, totalSb, deleteBtn, dailyData }) {
   const { dailyIntakes, dailyActivities, caloriefyDbDispatch, intervalActivities, intervalIntakes } = useContext(CaloriefyDbContext)
 
   const showDetails = () => {
@@ -33,7 +33,7 @@ function SidebarItem({ openFrom, color, expanded, disableGutters, totalSb, daily
     if (response.status !== 200) {
       return toast.error(response.message || response || `Internal server error!`)
     }
-    
+
     if (openFrom === 'Burn') {
       caloriefyDbDispatch({ type: 'SET_DAILY_ACTIVITIES', payload: dailyActivities.filter((item) => item.id !== deletedId) })
       caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES', payload: intervalActivities.filter((item) => item.id !== deletedId) })
@@ -80,7 +80,7 @@ function SidebarItem({ openFrom, color, expanded, disableGutters, totalSb, daily
           {dailyData.calories} CALORIES
         </Typography>
 
-        {!totalSb && (
+        {!totalSb && deleteBtn && (
           <>
             <Divider
               orientation='vertical'

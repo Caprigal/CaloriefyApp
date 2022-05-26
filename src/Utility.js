@@ -1,4 +1,24 @@
-export const totalDataCalc = (dailyData) => {
+export const calculateBCB = (lifestyle, weight, height, bday, gender) => {
+  let bcb
+  const today = new Date()
+  const age = today.getFullYear() - bday
+
+  if (age && gender === 0) {
+    lifestyle && weight && height
+      ? (bcb = (447.593 + 9.247 * weight + 3.098 * height - 4.33 * age) * (lifestyle / 100 + 1))
+      : bcb = 0
+  } else {
+    lifestyle && weight && height
+      ? (bcb = (88.362 + 13.397 * weight + 4.799 * height - 5.677 * age) * (lifestyle / 100 + 1))
+      : bcb = 0
+  }
+
+  return isNaN(bcb) ? 0 : parseInt(bcb)
+}
+
+export const totalDataCalc = (dailyData, type) => {
+  const user = JSON.parse(localStorage.getItem('user'))
+
   if (dailyData.length > 0) {
     let sumcalories = dailyData
       .map((item) => (item.calories ? item.calories : (item.calories = 0)))
@@ -38,7 +58,7 @@ export const totalDataCalc = (dailyData) => {
 
     return {
       name: 'Total',
-      calories: sumcalories,
+      calories: type === 'intake' ? parseInt(sumcalories) : parseInt(sumcalories) + calculateBCB(user.lifestyle, user.weight, user.height, user.birthdate, user.gender),
       carbohydrates_total_g: sumcarbs,
       fat_total_g: sumfats,
       protein_g: sumproteins,

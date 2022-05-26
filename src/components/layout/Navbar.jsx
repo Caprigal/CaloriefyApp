@@ -19,6 +19,8 @@ function Navbar() {
     e.preventDefault()
 
     caloriefyDbDispatch({ type: 'CLEAR_USER' })
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES' })
+    caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
     localStorage.removeItem('user')
     navigate('/')
   }
