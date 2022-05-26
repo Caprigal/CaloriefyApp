@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 import { Typography, Tabs, Tab } from '@mui/material'
 import SwipeableViews from 'react-swipeable-views/lib/SwipeableViews'
 import TabPanelLayout from '../components/layout/TabPanel'
@@ -11,34 +11,42 @@ import CaloriefyDbContext from '../context/caloriefydb/CaloriefyDbContext'
 function Home() {
   const [tabs, setTabs] = useState(0)
   const { caloriefyDbDispatch } = useContext(CaloriefyDbContext)
-  const currentDate = new Date()
-  const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - 1))
+
+  const setIntervalData = useCallback(
+    async (beforeDate) => {
+      /* HANDLE LOADING */
+      caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES_LOADING' })
+      caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES_LOADING' })
+
+      // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
+      const get_response = await getIntervalActivities(beforeDate, new Date())
+      if (get_response.status !== 200) {
+        caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES_LOADING' })
+        caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES_LOADING' })
+        return toast.error(get_response.message || get_response || `Internal server error!`)
+      }
+
+      caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES', payload: get_response.data })
+
+      // GET INTAKES FROM DB (TO GET WHOLE INTERVAL DATA)
+      const get_int_response = await getIntervalIntakes(beforeDate, new Date())
+      if (get_int_response.status !== 200) {
+        caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES_LOADING' })
+        caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES_LOADING' })
+        return toast.error(get_int_response.message || get_int_response || `Internal server error!`)
+      }
+
+      caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES', payload: get_int_response.data })
+    },
+    [caloriefyDbDispatch]
+  )
 
   useEffect(() => {
+    const currentDate = new Date()
+    const beforeDate = new Date(currentDate.setDate(currentDate.getDate() - 1))
+
     setIntervalData(beforeDate)
-  }, [caloriefyDbDispatch])
-
-  const setIntervalData = async (beforeDate) => {
-    /* HANDLE LOADING */
-    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES_LOADING' })
-    caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES_LOADING' })
-
-    // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
-    const get_response = await getIntervalActivities(beforeDate, new Date())
-    if (get_response.status !== 200) {
-      return toast.error(get_response.message || get_response || `Internal server error!`)
-    }
-
-    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES', payload: get_response.data })
-
-    // GET INTAKES FROM DB (TO GET WHOLE INTERVAL DATA)
-    const get_int_response = await getIntervalIntakes(beforeDate, new Date())
-    if (get_int_response.status !== 200) {
-      return toast.error(get_int_response.message || get_int_response || `Internal server error!`)
-    }
-
-    caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES', payload: get_int_response.data })
-  }
+  }, [setIntervalData])
 
   const handleChange = async (event, newTab) => {
     /* CLEAR FIRST */

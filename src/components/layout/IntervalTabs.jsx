@@ -50,13 +50,15 @@ function IntervalTabs(props) {
     caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES' })
 
     /* HANDLE LOADING */
-    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITY_LOADING' })
+    caloriefyDbDispatch({ type: 'SET_INTERVAL_ACTIVITIES_LOADING' })
     caloriefyDbDispatch({ type: 'SET_INTERVAL_INTAKES_LOADING' })
     setToDate(newDate)
 
     // GET ACTIVITIES FROM DB (TO GET WHOLE INTERVAL DATA)
     const get_response = await getIntervalActivities(fromDate, newDate)
     if (get_response.status !== 200) {
+      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES_LOADING' })
+      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES_LOADING' })
       return toast.error(get_response.message || get_response || `Internal server error!`)
     }
 
@@ -65,6 +67,8 @@ function IntervalTabs(props) {
     // GET INTAKES FROM DB (TO GET WHOLE INTERVAL DATA)
     const get_int_response = await getIntervalIntakes(fromDate, newDate)
     if (get_int_response.status !== 200) {
+      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_ACTIVITIES_LOADING' })
+      caloriefyDbDispatch({ type: 'CLEAR_INTERVAL_INTAKES_LOADING' })
       return toast.error(get_int_response.message || get_int_response || `Internal server error!`)
     }
 
@@ -116,7 +120,9 @@ function IntervalTabs(props) {
           )}
 
           {intervalActivities.length > 0 &&
-            intervalActivities.map((item, i) => <SidebarItem color='burn.main' openFrom={'Burn'} key={item.id} deleteBtn={true} dailyData={item} />)}
+            intervalActivities.map((item, i) => (
+              <SidebarItem color='burn.main' openFrom={'Burn'} key={item.id} deleteBtn={true} dailyData={item} />
+            ))}
 
           {intervalActivities.length > 0 && user.lifestyle && user.weight && user.height && user.birthdate && user.gender ? (
             <SidebarItem
@@ -129,7 +135,9 @@ function IntervalTabs(props) {
                 calories: calculateBCB(user.lifestyle, user.weight, user.height, user.birthdate, user.gender),
               }}
             />
-          ) : <></>}
+          ) : (
+            <></>
+          )}
 
           {!activitiesIntervalLoading && intervalActivities.length === 0 && <h5>No activities found</h5>}
 

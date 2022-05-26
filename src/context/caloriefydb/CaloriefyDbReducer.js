@@ -41,6 +41,11 @@ const CaloriefyDbReducer = (state, action) => {
         ...state,
         intakesIntervalLoading: true,
       }
+    case 'CLEAR_INTERVAL_INTAKES_LOADING':
+      return {
+        ...state,
+        intakesIntervalLoading: false,
+      }
     case 'SET_DAILY_ACTIVITIES':
       return {
         ...state,
@@ -71,6 +76,11 @@ const CaloriefyDbReducer = (state, action) => {
       return {
         ...state,
         activitiesIntervalLoading: true,
+      }
+    case 'CLEAR_INTERVAL_ACTIVITIES_LOADING':
+      return {
+        ...state,
+        activitiesIntervalLoading: false,
       }
     default:
       return state
