@@ -1,7 +1,8 @@
-export const calculateBCB = (lifestyle, weight, height, bday, gender) => {
+export const calculateBCB = (lifestyle, weight, height, bdayDate, gender) => {
   let bcb
   const today = new Date()
-  const age = today.getFullYear() - bday
+  const bday = new Date(bdayDate)
+  const age = today.getFullYear() - bday.getFullYear()
 
   if (age && gender === 0) {
     lifestyle && weight && height
