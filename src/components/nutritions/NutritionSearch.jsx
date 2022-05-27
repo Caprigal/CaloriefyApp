@@ -185,16 +185,20 @@ function NutritionSearch(props) {
       setCalorieNinjaLoading(true)
 
       /* GET NUTRITIONS */
-      const nuts = await fetchNutritions(searchInput.value)
-      if (nuts.length === 0) {
-        toast.warning('Did not find any result!')
-      }
+      const response = await fetchNutritions(searchInput.value)
 
-      /* SET NUTRITION RESPONSE TO TABLE */
-      setNutritions(nuts)
-
-      /* RESET SEARCHINPUT */
       setCalorieNinjaLoading(false)
+
+      if (response.status !== 200) {
+        return toast.error(response.message || response || `Internal server error!`)
+      } else {
+        if (response.data.items.length === 0) {
+          toast.warning('Did not find any result!')
+        }
+
+        /* SET NUTRITION RESPONSE TO TABLE */
+        setNutritions(response.data.items)
+      }
     }
   }
 
@@ -280,7 +284,7 @@ function NutritionSearch(props) {
                 return !pos || item.name !== ary[pos - 1].name
               })}
             loading={intakesListLoader}
-            loadingText='Loading Caloriefy list..'
+            loadingText='Loading Caliefy list..'
             onOpen={openCaloriefyListTab}
             clearOnEscape={true}
             onChange={(e, value) => {
@@ -312,7 +316,7 @@ function NutritionSearch(props) {
                 sx={{ backgroundColor: 'primary.light', borderTopRightRadius: 3, borderTopLeftRadius: 3 }}
                 variant='filled'
                 fullWidth
-                label='Select from Caloriefy list'
+                label='Select from Caliefy list'
                 placeholder='Foods and drinks'
               />
             )}

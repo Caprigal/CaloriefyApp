@@ -42,7 +42,7 @@ function Navbar() {
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <MaterialLink component={RouterLink} variant='h2' underline='none' color='inherit' fontStyle={'normal'} to='/'>
               <FaRunning fontSize={22} style={{ position: 'absolute', marginLeft: '-26px' }} />
-              CALORIEFY
+              CALIEFY
             </MaterialLink>
             <Divider orientation='vertical' variant='fullWidth' flexItem sx={{ borderColor: 'primary.light', ml: 1, mr: 1 }} />
             {!user ? (

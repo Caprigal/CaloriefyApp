@@ -7,11 +7,17 @@ const calorieninja = axios.create({
   baseURL: CALORIENINJA_URL,
   headers: {
     'X-Api-Key': CALORIENINJA_TOKEN,
-  }
+  },
+  contentType: 'application/json',
 })
 
 export const fetchNutritions = async (text) => {
-  const response = await calorieninja.get(`/nutrition?query=${text}`)
+  try {
+    const response = await calorieninja.get(`/nutrition?query=${text}`)
+    return response
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
 
-  return response.data.items
+    return message
+  }
 }

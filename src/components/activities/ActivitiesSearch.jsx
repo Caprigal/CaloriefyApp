@@ -147,7 +147,7 @@ function ActivitiesSearch() {
           })}
         onOpen={openCaloriefyListTab}
         loading={activitiesListLoader}
-        loadingText='Loading Caloriefy list..'
+        loadingText='Loading Caliefy list..'
         onChange={(e, value) => {
           //set activities
           if (value) {
@@ -175,8 +175,8 @@ function ActivitiesSearch() {
             sx={{ backgroundColor: 'primary.light', borderTopRightRadius: 3, borderTopLeftRadius: 3, zIndex: 0 }}
             variant='filled'
             fullWidth
-            label='Select from Caloriefy list'
-            placeholder='Activity Caloriefy List'
+            label='Select from Caliefy list'
+            placeholder='Activity Caliefy List'
           />
         )}
       />
