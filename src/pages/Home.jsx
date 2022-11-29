@@ -76,7 +76,7 @@ function Home() {
     <>
       {console.log('Home render')}
       <Box sx={{ marginTop: 15 }}>
-        <Typography variant='h1'>sdf</Typography>
+        <Typography variant='h1'>Dashboard</Typography>
         <Typography variant='h4' sx={{ letterSpacing: '12px' }}>
           Dashboard
         </Typography>
