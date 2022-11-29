@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Navbar from './components/layout/Navbar'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
+import Otthon from './pages/Otthon'
 import Home from './pages/Home'
 import Burn from './pages/Burn'
 import NotFound from './pages/NotFound'
@@ -28,6 +29,7 @@ function App() {
                 <Container maxWidth='md'>
                   <Routes>
                     <Route path='/' element={<Home />} />
+                    <Route path='/otthon' element={<Otthon />} />
                     <Route path='/burn' element={<Burn />} />
                     <Route path='/intake' element={<Intake />} />
                     <Route path='/signin' element={<Signin />} />

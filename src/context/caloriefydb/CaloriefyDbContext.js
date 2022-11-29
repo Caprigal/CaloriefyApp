@@ -7,6 +7,7 @@ export const CaloriefyDbProvider = ({children}) => {
   const user = JSON.parse(localStorage.getItem('user'))
 
   const initialState = {
+    homeData: [],
     dailyIntakes: [],
     dailyActivities: [],
     intakesList: [],
@@ -17,6 +18,7 @@ export const CaloriefyDbProvider = ({children}) => {
     intervalActivities: [],
     user: user ? user : null,
     intakesIntervalLoading: false,
+    homeLoading: true,
     activitiesIntervalLoading: false,
   }
 

@@ -82,6 +82,21 @@ const CaloriefyDbReducer = (state, action) => {
         ...state,
         activitiesIntervalLoading: false,
       }
+    case 'SET_HOME':
+      return {
+        ...state,
+        homeData: action.payload,
+      }
+    case 'SET_HOME_LOADING':
+      return {
+        ...state,
+        homeLoading: true,
+      }
+    case 'CLEAR_HOME_LOADING':
+      return {
+        ...state,
+        homeLoading: false,
+      }
     default:
       return state
   }

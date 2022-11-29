@@ -3,6 +3,11 @@ import { green, grey, red, orange } from '@mui/material/colors'
 
 const rawTheme = createTheme({
   palette: {
+    homemanager: {
+      light: '#b1b1d5',
+      main: '#ffc393',
+      dark: '#232323',
+    },
     primary: {
       light: '#b1b1d5',
       main: '#42426a',

@@ -173,3 +173,14 @@ export const getActivityHistory = async () => {
     return message
   }
 }
+
+export const getHome = async () => {
+  try {
+    const response = await caloriefyLambda.get(`/getHome`)
+    return response
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+    return message
+  }
+}
